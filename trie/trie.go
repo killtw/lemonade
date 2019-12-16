@@ -1,5 +1,9 @@
 package trie
 
+import "unicode"
+
+var symbols = []rune{}
+
 type Trie struct {
 	Root *Node
 }
@@ -11,7 +15,7 @@ func New() *Trie {
 }
 
 func (trie *Trie) Add(word string) {
-	if len(word) <=0 {
+	if len(word) <= 0 {
 		return
 	}
 
@@ -30,6 +34,10 @@ func (trie *Trie) Scan(word string) bool {
 	node := trie.Root
 
 	for _, char := range chars {
+		if isSymbol(char) {
+			continue
+		}
+
 		found := node.get(char)
 
 		if found == nil {
@@ -58,8 +66,20 @@ func (trie *Trie) Search(word string) (matches []string) {
 		matchFlag := 0
 		flag := false
 
+		if isSymbol(chars[pointer]) {
+			continue
+		}
+
 		for i := pointer; i < length; i++ {
 			child := node.get(chars[i])
+
+			if isSymbol(chars[i]) {
+				if matchFlag > 0 {
+					matchFlag++
+				}
+
+				continue
+			}
 
 			if child == nil {
 				break
@@ -91,7 +111,7 @@ func (trie *Trie) Search(word string) (matches []string) {
 func unique(elements []string) (result []string) {
 	encountered := map[string]bool{}
 
-	for v:= range elements {
+	for v := range elements {
 		encountered[elements[v]] = true
 	}
 
@@ -100,4 +120,19 @@ func unique(elements []string) (result []string) {
 	}
 
 	return
+}
+
+func isSymbol(char rune) bool {
+
+	if unicode.IsSpace(char) || unicode.IsSymbol(char) || unicode.IsPunct(char) {
+		return true
+	}
+
+	for _, r := range symbols {
+		if char == r {
+			return true
+		}
+	}
+
+	return false
 }
