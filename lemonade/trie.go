@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-var dbHost = getenv("DB_HOST", "localhost")
+var dbHost = getenv("DB_HOST", "")
 
 type Word struct {
 	Keyword string
@@ -17,19 +17,21 @@ type Word struct {
 func InitTrie() (err error) {
 	t := trie.New()
 
-	words, err := getWords()
+	if dbHost != "" {
+		words, err := getWords()
 
-	if err != nil {
-		return
-	}
+		if err != nil {
+			return err
+		}
 
-	for _, word := range words {
-		t.Add(word.Keyword)
+		for _, word := range words {
+			t.Add(word.Keyword)
+		}
+
+		fmt.Println("Words imported")
 	}
 
 	Trie = t
-
-	fmt.Println("Words imported")
 
 	return
 }
@@ -48,7 +50,7 @@ func getWords() (words []Word, err error) {
 	return
 }
 
-func getenv(key string, fallback string) string {
+func getenv(key, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value
 	}
