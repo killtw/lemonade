@@ -37,10 +37,7 @@ func addWordHandler(c *gin.Context) {
 }
 
 func routers() *gin.Engine {
-	router := gin.New()
-
-	router.Use(gin.Logger())
-	router.Use(gin.Recovery())
+	router := gin.Default()
 
 	router.POST("/replace", replaceHandler)
 	router.POST("/addWord", addWordHandler)
