@@ -1,10 +1,10 @@
-package lemonade
+package http
 
 import "net/http"
 
-func RunHttpServer() (err error) {
+func RunHttpServer() error {
 	server := &http.Server{
-		Addr: ":8080",
+		Addr:    ":8080",
 		Handler: routers(),
 	}
 

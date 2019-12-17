@@ -1,7 +1,8 @@
-package lemonade
+package http
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/killtw/lemonade/lemonade"
 	"net/http"
 )
 
@@ -17,7 +18,7 @@ func heartbeatHandler(c *gin.Context) {
 
 func replaceHandler(c *gin.Context) {
 	message := c.PostForm("message")
-	filtered, matches := Replace(message)
+	filtered, matches := lemonade.Replace(message)
 
 	c.JSON(http.StatusOK, gin.H{
 		"original": message,
@@ -28,7 +29,7 @@ func replaceHandler(c *gin.Context) {
 
 func addWordHandler(c *gin.Context) {
 	word := c.PostForm("word")
-	Add(word)
+	lemonade.Add(word)
 
 	c.JSON(http.StatusOK, gin.H{
 		"status": "ok",
