@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package protos;
+
+service Lemonade {
+    rpc Replace (ReplaceRequest) returns (ReplaceReply) {}
+}
+
+message ReplaceRequest {
+    string message = 1;
+}
+
+message ReplaceReply {
+    string original = 1;
+    string message = 2;
+    repeated string matches = 3;
+}
